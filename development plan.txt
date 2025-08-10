@@ -1,0 +1,205 @@
+1. Purpose & Objectives
+Hero MotoCorp is one of the world’s largest two-wheeler manufacturers.
+The supply chain involves raw material procurement, vendor management, parts manufacturing, assembly, distribution, and dealer sales.
+Your Python + SQL system should help:
+1) Optimize parts supply from multiple vendors. 
+2) Track production progress across plants.
+3) Monitor inventory at different stages (raw, WIP, finished).
+4) Streamline logistics for nationwide dealer distribution. 
+5) Generate analytics for forecasting and decision-making.
+
+2. Hero MotoCorp Supply Chain Stages
+We can structure the system to reflect five key stages:
+
+1. Procurement
+Vendors supply steel, tires, electronics, plastics, etc. And add parts and their details. 
+Data tracked: Vendor details, part specifications, lead times, quality ratings.
+Features:
+- Vendor onboarding & rating system.
+- Purchase Order management.
+- Supplier performance tracking.
+
+2. Inbound Logistics
+Tracking shipments from suppliers to manufacturing plants. Add new suppliers.
+Real-time updates on ETA, delays, and shortages.
+Warehouse space allocation.
+
+3. Manufacturing
+Plants assemble motorcycles in stages:
+Engine assembly
+Chassis & frame building
+Painting & finishing
+Final assembly & inspection
+System should:
+Track Work-In-Progress (WIP) by stage.
+Monitor machine utilization & downtime.
+Alert if parts shortage halts production.
+
+4. Outbound Logistics
+Finished bikes shipped to regional warehouses & dealers.
+
+Track dispatch dates, transit time, and delivery confirmation.
+
+5. Dealers & Sales
+Dealer network across India.
+
+Monitor:
+
+Dealer orders & allocations.
+
+Stock at each dealership.
+
+Sales trends by model & location.
+
+3. System Modules
+The Python + SQL application should be split into:
+
+A. Master Data Management
+Vendors (name, location, rating, part types supplied)
+
+Products (models, variants, parts list, BOM - Bill of Materials)
+
+Plants (location, capacity, shift details)
+
+Dealers (location, capacity, sales history)
+
+B. Procurement Module
+Create & track Purchase Orders (POs).
+
+Auto-reorder based on production forecast.
+
+Supplier delivery performance analysis.
+
+C. Production Planning Module
+Manage BOM for each model.
+
+Allocate parts to assembly lines.
+
+Track WIP by stage.
+
+Generate daily production reports.
+
+D. Logistics Module
+Inbound tracking from supplier to plant.
+
+Outbound tracking from plant to dealer.
+
+Route optimization (future enhancement with Google Maps API).
+
+E. Inventory Management
+Raw Material stock.
+
+WIP inventory.
+
+Finished Goods stock.
+
+Reorder level alerts.
+
+F. Reporting & Analytics
+Low-stock alerts.
+
+Supplier on-time delivery rate.
+
+Production vs. demand analysis.
+
+Sales trends by region.
+
+Monthly plant performance.
+
+4. Database Structure (SQL)
+Example tables:
+
+sql
+Copy
+Edit
+-- Suppliers
+CREATE TABLE suppliers (
+    supplier_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    location TEXT,
+    rating INTEGER,
+    lead_time_days INTEGER
+);
+
+-- Parts
+CREATE TABLE parts (
+    part_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    category TEXT,
+    unit_price REAL,
+    stock_level INTEGER,
+    reorder_level INTEGER,
+    supplier_id INTEGER,
+    FOREIGN KEY(supplier_id) REFERENCES suppliers(supplier_id)
+);
+
+-- BOM (Bill of Materials)
+CREATE TABLE bom (
+    model_id INTEGER,
+    part_id INTEGER,
+    quantity_required INTEGER,
+    PRIMARY KEY (model_id, part_id)
+);
+
+-- Production Status
+CREATE TABLE production (
+    production_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    model_id INTEGER,
+    stage TEXT,
+    status TEXT,
+    quantity INTEGER,
+    date DATE
+);
+5. Python Functional Flow
+plaintext
+Copy
+Edit
+[Login & Role Check]
+       |
+       v
+[Main Menu]
+  1. Vendor Management
+  2. Parts & Inventory
+  3. Purchase Orders
+  4. Production Tracking
+  5. Logistics Tracking
+  6. Dealer & Sales Data
+  7. Reports & Analytics
+  8. Exit
+Example Actions:
+
+Vendor Management: Add/edit vendors, assign parts.
+
+Inventory: Check current stock, trigger PO if below reorder level.
+
+Production: Allocate parts, track assembly stage.
+
+Logistics: Update shipment status.
+
+Reports: Supplier performance, production output, sales by region.
+
+6. Suggested Tech Stack
+Backend: Python 3.x
+
+Database: MySQL (multi-user, large data handling)
+
+Libraries:
+
+mysql.connector → DB connection
+
+pandas → analytics & reports
+
+matplotlib → production/sales graphs
+
+tkinter → GUI (optional for better UX)
+
+7. Future Expansion Ideas
+IoT integration for live machine status.
+
+AI demand forecasting using historical sales.
+
+QR/barcode tracking for parts.
+
+Dealer portal for real-time stock requests.
+
+
